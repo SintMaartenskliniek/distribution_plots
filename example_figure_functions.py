@@ -35,12 +35,9 @@ for c in color:
     
 
 # Jitter plot
-Fig1 = jitter_distribution_figure(data, cats, YLabel='Y label', DistType='Gaussian')
-# set(Fig1.jit,'FontSize',23,'linewidth',2,'box','on')
+Fig1 = jitter_distribution_figure(data, cats, YLabel='Y label', DistType='Gaussian', Colors=colors)
 
 Fig2 = jitter_distribution_figure(data, cats, YLabel='Y label', PlotType='Internal', Colors=colors)
-# set(Fig2.jit,'FontSize',23,'linewidth',2,'box','on')
 
 # Scatter plot 
-Fig3 = scatter_distribution_figure(datax, datay, cats, YLabel='Y label', XLabel='X label', DistType='Kernel'); 
-# set(Fig3.scat,'FontSize',23,'linewidth',2,'box','on')
+Fig3 = scatter_distribution_figure(datax, datay, cats, YLabel='Y label', XLabel='X label', DistType='Kernel', Colors=colors); 

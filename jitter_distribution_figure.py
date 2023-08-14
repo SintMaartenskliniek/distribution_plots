@@ -48,7 +48,6 @@ def jitter_distribution_figure(data=False, cats=False, **kwargs):
     
     # Import dependencies
     import numpy as np
-    import seaborn as sns
     import matplotlib as mpl
     import matplotlib.pyplot as plt
     import statsmodels.api as sm
@@ -67,9 +66,9 @@ def jitter_distribution_figure(data=False, cats=False, **kwargs):
     cols = colormap([0])
     for n in range(1, len(catnames)):
         cols = np.vstack((cols, colormap([n])))
-    marker_size = 200
+    marker_size = 150
     line_width = 3
-    cap_size = 15
+    cap_size = 5
     dist_type = 'Kernel'
     plot_type = 'External'
     y_label = ''
@@ -314,41 +313,3 @@ def Jitter_distribution(data, pos, dist_type, scale):
     return xJitter, yJitter, xDistribution, yDistribution, xMean, yMean, xError, yError
     
     
-# function Jitter_distribution(data, pos, col, marker_size, line_width, cap_size, plot_type, scale)
-#     [density, value] = ksdensity(data);          
-#     density = density(value >= min(data) & value <= max(data));
-#     value = value(value >= min(data) & value <= max(data));
-#     value(1) = min(data);
-#     value(end) = max(data);
-
-#     width = 0.05/max(density);
-#     jitterstrength = interp1(value, density*width, data);
-#     jit = 2*(rand(size(data))-0.5);
-    
-#     scatter(pos + jit.*jitterstrength, data, marker_size, 'filled','MarkerEdgeColor','None','MarkerFaceColor',col,'MarkerFaceAlpha',0.6);
-
-#     switch plot_type 
-#         case 'Gaussian'
-#             mean_data = mean(data, 'omitnan'); 
-#             std_data = std(data, 'omitnan'); 
-#             xnormdis = (-3*std_data+mean_data:0.001:3*std_data+mean_data); 
-#             y_norm = normpdf(xnormdis,mean_data,std_data);
-#             y_norm(1) = 0; 
-#             y_norm(end) = 0; 
-#             y_norm = y_norm*scale; 
-#             plot(y_norm+pos+0.20,xnormdis,'Color',col,'LineWidth',0.7*line_width)
-#             patch(y_norm+pos+0.20,xnormdis,col,'FaceAlpha',0.4,'EdgeColor','none')
-#         case 'Kernel'
-#             [f, xi] = ksdensity(data); 
-#             f = f*scale; 
-#             min_f = min(f); 
-#             offset = pos+0.2-min_f; 
-#             plot(f+offset,xi,'Color',col,'LineWidth',0.7*line_width)
-#             patch(f+offset,xi,col,'FaceAlpha',0.4,'EdgeColor','none')
-#     end 
-   
-#     errorbar(pos+0.20,mean(data),std(data),'Color','k','LineWidth',line_width,'CapSize',cap_size);
-#     scatter(pos+0.20, mean(data),marker_size,'filled','MarkerFaceColor','k','MarkerEdgeColor', 'None');
-
-# end 
-
