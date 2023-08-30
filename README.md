@@ -13,3 +13,7 @@ Packages needed:
  - matplotlib (3.5.2)
  - statsmodels.api (0.13.2)
  - sklearn (1.3.0)
+
+![jitter_distribution_figure_example1](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/df8ef43f-3946-4a83-ae3c-52f1b20a0444)
+![jitter_distribution_figure_example2](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/24a5deff-c1dd-4591-88ef-ff0778ed3a35)
+![scatter_distribution_figure_example](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/3e5df70e-644a-421a-9545-9985e168dcb1)
