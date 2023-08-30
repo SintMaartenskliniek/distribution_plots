@@ -118,8 +118,8 @@ def jitter_distribution_figure(data=False, cats=False, **kwargs):
                 axs[0].scatter(xMean, yMean, s=marker_size, color='k', edgecolors='none')                
                 
             # Format axis of jitter plot
-            axs[0].set(xticks=np.arange(start=0, stop=len(catnames), step=1), xticklabels=catnames)
-            axs[0].set_xlim([-0.5, len(catnames)+0.05])
+            axs[0].set(xticks=np.arange(start=0.1, stop=len(catnames), step=1), xticklabels=catnames)
+            axs[0].set_xlim([-0.5, len(catnames)+0.03])
             axs[0].set(ylabel=y_label)
             for item,value in kwargs.items():
                 if item=='YLim':
@@ -178,12 +178,14 @@ def jitter_distribution_figure(data=False, cats=False, **kwargs):
                 axs.scatter(xMean, yMean, s=marker_size, color='k', edgecolors='none')                
             
             # Format axis
-            axs.set(xticks=np.arange(start=0, stop=len(catnames), step=1), xticklabels=catnames)
-            axs.set_xlim([-0.5, len(catnames)+0.05])
+            axs.set(xticks=np.arange(start=0.1, stop=len(catnames), step=1), xticklabels=catnames)
+            axs.set_xlim([-0.5, len(catnames)+0.03])
             axs.set(ylabel=y_label)
             for item,value in kwargs.items():
                 if item=='YLim':
                     axs[0].set_ylim(y_lim)
+    
+    plt.show(block=False)
     
     return
 
@@ -253,6 +255,7 @@ def Distribution(data, dist_type):
 
 
 def Jitter_distribution(data, pos, dist_type, scale):
+    
     # Import dependencies
     import numpy as np
     from scipy import stats

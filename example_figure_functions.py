@@ -11,6 +11,11 @@ Python version:
 
 """
 
+# Check required version of Python (3.10 or higher)
+import sys
+if sys.version_info[1] < 10:
+    raise Exception("Must be using Python 3.10 or higher")
+
 # Import dependencies
 import numpy as np
 import matplotlib as mpl
@@ -40,4 +45,4 @@ Fig1 = jitter_distribution_figure(data, cats, YLabel='Y label', DistType='Gaussi
 Fig2 = jitter_distribution_figure(data, cats, YLabel='Y label', PlotType='Internal', Colors=colors)
 
 # Scatter plot 
-Fig3 = scatter_distribution_figure(datax, datay, cats, YLabel='Y label', XLabel='X label', DistType='Kernel', Colors=colors); 
+Fig3 = scatter_distribution_figure(datax, datay, cats, YLabel='Y label', XLabel='X label', DistType='Kernel', Colors=colors)

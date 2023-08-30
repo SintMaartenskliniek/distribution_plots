@@ -174,10 +174,14 @@ def scatter_distribution_figure(datax=False, datay=False, cats=False, **kwargs):
     axs[0,1].spines['right'].set_color('none')
     axs[0,1].spines['top'].set_color('none')
     
+    plt.show(block=False)
+    
     return
     
 # Functions 
 def Scatter_trendline(datax, datay, trendline):
+    
+    # Import dependencies
     from sklearn import linear_model
     import numpy as np
     
@@ -195,6 +199,7 @@ def Scatter_trendline(datax, datay, trendline):
     
     
 def Distribution(data, direction, plot_type):
+    
     # Import dependencies
     import numpy as np
     from scipy import stats
