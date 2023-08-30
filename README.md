@@ -9,6 +9,7 @@ Run the example_figure_functions.py script to run examples of:
  - Scatter plot with distributions of x and y values outside the graph area *(scatter_distribution_figure.py)*
 
 
+**These scripts require Python version 3.10 or higher**
 Packages needed:
  - numpy (1.23.1)
  - scipy (1.9.1)
