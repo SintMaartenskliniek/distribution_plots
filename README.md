@@ -1,4 +1,4 @@
-# distribution_plots
+# Distribution plots
 Python version of distribution plot scripts of Eline Zwijgers (Sint Maartenskliniek, 2022). 
 Original language: Matlab
 
