@@ -2,10 +2,12 @@
 Python version of distribution plot scripts of Eline Zwijgers (Sint Maartenskliniek, 2022). 
 Original language: Matlab
 
+
 Run the example_figure_functions.py script to run examples of:
- - Jitter plot with distribution outside the graph area
- - Jitter plot with distribution inside the graph area
- - Scatter plot with distributions of x and y values outside the graph area
+ - Jitter plot with distribution outside the graph area *(jitter_distribution_figure.py)*
+ - Jitter plot with distribution inside the graph area *(jitter_distribution_figure.py)*
+ - Scatter plot with distributions of x and y values outside the graph area *(scatter_distribution_figure.py)*
+
 
 Packages needed:
  - numpy (1.23.1)
