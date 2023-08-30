@@ -10,6 +10,7 @@ Run the example_figure_functions.py script to run examples of:
 
 
 **These scripts require Python version 3.10 or higher**
+
 Packages needed:
  - numpy (1.23.1)
  - scipy (1.9.1)
