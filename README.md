@@ -18,6 +18,7 @@ Packages needed:
  - statsmodels.api (0.13.2)
  - sklearn (1.3.0)
 
-![jitter_distribution_figure_example1](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/df8ef43f-3946-4a83-ae3c-52f1b20a0444)
-![jitter_distribution_figure_example2](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/24a5deff-c1dd-4591-88ef-ff0778ed3a35)
-![scatter_distribution_figure_example](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/3e5df70e-644a-421a-9545-9985e168dcb1)
+![jitter_distribution_figure_example1](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/1a77120b-647a-4a59-90b7-5b057521a46c)
+![jitter_distribution_figure_example2](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/a6766563-a437-4016-a793-5d3f813a02e9)
+![scatter_distribution_figure_example](https://github.com/CarmenEnsink/distribution_plots/assets/61141983/36474b24-7940-418d-ad5b-a9ce7d61281a)
+
