@@ -80,7 +80,7 @@ def scatter_distribution_figure(datax=False, datay=False, cats=False, **kwargs):
         if item == 'Markersize':
             marker_size = value
         if item == 'Trendline':
-            line_width = value
+            trendline = value
         if item == 'XLim':
             x_lim = value
         if item == 'YLim':
@@ -105,7 +105,7 @@ def scatter_distribution_figure(datax=False, datay=False, cats=False, **kwargs):
         thisDatax = datax[indices].flatten()
         thisDatay = datay[indices].flatten()
         axs[1,0].scatter(thisDatax, thisDatay, s=marker_size, color=cols[n], edgecolors='none', alpha=0.6, label = thisCat)
-        xTrendline, yTrendline = Scatter_trendline(thisDatax, thisDatay, trendline=True)
+        xTrendline, yTrendline = Scatter_trendline(thisDatax, thisDatay, trendline)
         axs[1,0].plot(xTrendline, yTrendline, color=cols[n], linewidth=2, alpha=1)
     
     # Format axis of scatter plot
