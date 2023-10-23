@@ -11,11 +11,6 @@ Python version:
 
 """
 
-# Check required version of Python (3.10 or higher)
-import sys
-if sys.version_info[1] < 10:
-    raise Exception("These scripts require Python 3.10 or higher")
-
 # Import dependencies
 import numpy as np
 import matplotlib as mpl
