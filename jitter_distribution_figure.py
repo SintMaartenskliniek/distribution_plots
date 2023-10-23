@@ -9,10 +9,10 @@ cats:     N x 1 list of character vectors representing the
           corresponding groups of the data points
           
 OPTIONAL INPUT
-jitter_plot(..., 'PARAM1', val1, 'PARAM2', val2, ...)
+jitter_plot(..., KWARG1 = value1, KWARG2 = value2, ...)
  
-    'Colors'       Color of the jitter plots, num of cells should 
-                   correspond to categories{[r,g,b], [r,g,b], ...}. 
+    'Colors'       Color of the jitter plots, num of rows should 
+                   correspond to categories: np.array([[r,g,b], [r,g,b], ...]). 
                    Defaults to lines colormap. 
     'Markersize'   Markersize of data points.
                    Defaults to 200.   
@@ -20,9 +20,9 @@ jitter_plot(..., 'PARAM1', val1, 'PARAM2', val2, ...)
                    Defaults to 3.  
     'Capsize'      Capsize of the mean and std plot. 
                    Defaults to 15.
-    'YLim'         Ylim [min max]
+    'YLim'         Ylim: np.array([min, max])
                    Defaults to standard lims. 
-    'YLabel'       Ylabel {str}. 
+    'YLabel'       Ylabel: string. 
                    Defaults to empty string.
     'DistType'     'Kernel' or 'Gaussian'. 
                    Defaults to Kernel. 
@@ -102,89 +102,85 @@ def jitter_distribution_figure(data=False, cats=False, **kwargs):
                 plot_type = value
     
     # Plotting
-    match plot_type:
-        case 'External':
-            # Jitter plot
-            fig, axs = plt.subplots(nrows=1, ncols=2, gridspec_kw={'width_ratios': [3, 1]})
+    if plot_type == 'External':
+        # Jitter plot
+        fig, axs = plt.subplots(nrows=1, ncols=2, gridspec_kw={'width_ratios': [3, 1]})
+        
+        for n in range(0,len(catnames)):
+            thisCat = catnames[n]
+            indices = [i for i, s in enumerate(cats) if thisCat in s]
+            thisData = data[indices].flatten()
+            xJitter, yJitter, xMean, yMean, xError, yError = Jitter(thisData, n)
             
-            for n in range(0,len(catnames)):
-                thisCat = catnames[n]
-                indices = [i for i, s in enumerate(cats) if thisCat in s]
-                thisData = data[indices].flatten()
-                xJitter, yJitter, xMean, yMean, xError, yError = Jitter(thisData, n)
-                
-                axs[0].scatter(xJitter, yJitter, s=marker_size, color=cols[n], edgecolors='none', alpha=0.6) #MarkerSize=marker_size, MarkerFaceColor=col, MarkerEdgeColor=None, MarkerFaceAlpha=0.6)
-                axs[0].errorbar(xMean, yMean, yerr=yError, ecolor='k', elinewidth=line_width, capsize=cap_size)
-                axs[0].scatter(xMean, yMean, s=marker_size, color='k', edgecolors='none')                
-                
-            # Format axis of jitter plot
-            axs[0].set(xticks=np.arange(start=0.1, stop=len(catnames), step=1), xticklabels=catnames)
-            axs[0].set_xlim([-0.5, len(catnames)+0.03])
-            axs[0].set(ylabel=y_label)
-            for item,value in kwargs.items():
-                if item=='YLim':
-                    axs[0].set_ylim(y_lim)
+            axs[0].scatter(xJitter, yJitter, s=marker_size, color=cols[n], edgecolors='none', alpha=0.6) #MarkerSize=marker_size, MarkerFaceColor=col, MarkerEdgeColor=None, MarkerFaceAlpha=0.6)
+            axs[0].errorbar(xMean, yMean, yerr=yError, ecolor='k', elinewidth=line_width, capsize=cap_size)
+            axs[0].scatter(xMean, yMean, s=marker_size, color='k', edgecolors='none')                
             
-            # Distribution plot
-            for n in range(0,len(catnames)):
-                thisCat = catnames[n]
-                indices = [i for i, s in enumerate(cats) if thisCat in s]
-                thisData = data[indices].flatten()
-                xDistribution, yDistribution = Distribution(thisData, dist_type)
-                axs[1].plot(xDistribution, yDistribution, color=cols[n], linewidth=0.7*line_width)
-                axs[1].fill_between(x=xDistribution, y1=yDistribution, y2=0, color=cols[n], alpha=0.4, edgecolor='none')
-            
-            # Format axis of distribution plot
-            for item,value in kwargs.items():
-                if item=='YLim':
-                    axs[1].set_ylim(y_lim)
-            axs[1].set(xticks=[], yticks=[])  
-            axs[1].spines['bottom'].set_color('none')
-            axs[1].spines['left'].set_color('none')
-            axs[1].spines['right'].set_color('none')
-            axs[1].spines['top'].set_color('none')
+        # Format axis of jitter plot
+        axs[0].set(xticks=np.arange(start=0.1, stop=len(catnames), step=1), xticklabels=catnames)
+        axs[0].set_xlim([-0.5, len(catnames)+0.03])
+        axs[0].set(ylabel=y_label)
+        for item,value in kwargs.items():
+            if item=='YLim':
+                axs[0].set_ylim(y_lim)
+        
+        # Distribution plot
+        for n in range(0,len(catnames)):
+            thisCat = catnames[n]
+            indices = [i for i, s in enumerate(cats) if thisCat in s]
+            thisData = data[indices].flatten()
+            xDistribution, yDistribution = Distribution(thisData, dist_type)
+            axs[1].plot(xDistribution, yDistribution, color=cols[n], linewidth=0.7*line_width)
+            axs[1].fill_between(x=xDistribution, y1=yDistribution, y2=0, color=cols[n], alpha=0.4, edgecolor='none')
+        
+        # Format axis of distribution plot
+        axs[1].sharey(axs[0])
+        axs[1].tick_params(axis='both', colors='none')
+        axs[1].spines['bottom'].set_color('none')
+        axs[1].spines['left'].set_color('none')
+        axs[1].spines['right'].set_color('none')
+        axs[1].spines['top'].set_color('none')
             
             
-        case 'Internal':
-            # Jitter plot combined with distribution plot
-            fig, axs = plt.subplots(nrows=1, ncols=1)
+    elif plot_type == 'Internal':
+        # Jitter plot combined with distribution plot
+        fig, axs = plt.subplots(nrows=1, ncols=1)
+        
+        for n in range(0, len(catnames)):
+            thisCat = catnames[n]
+            indices = [i for i, s in enumerate(cats) if thisCat in s]
+            thisData = data[indices].flatten()
             
-            for n in range(0, len(catnames)):
-                thisCat = catnames[n]
-                indices = [i for i, s in enumerate(cats) if thisCat in s]
-                thisData = data[indices].flatten()
-                
-                # Scale of distribution
-                kde = sm.nonparametric.KDEUnivariate(data)
-                kde.fit()
-                ydens = kde.density
-                match dist_type:
-                    case 'Kernel':
-                        scale = 0.20/np.max(ydens)
-                    case 'Gaussian':
-                        scale = 0.1/np.max(ydens)
-                
-                xJitter, yJitter, xDistribution, yDistribution, xMean, yMean, xError, yError = Jitter_distribution(thisData, n, dist_type, scale)
-                
-                # Plot Jitter
-                axs.scatter(xJitter, yJitter, s=marker_size, color=cols[n], edgecolors='none', alpha=0.6)
-                
-                # Plot distribution
-                axs.plot(xDistribution, yDistribution, color=cols[n], linewidth=0.7*line_width)
-                axs.fill_between(x=xDistribution, y1=yDistribution, y2=0, color=cols[n], alpha=0.4, edgecolor='none')
-                
-                
-                axs.errorbar(xMean, yMean, yerr=yError, ecolor='k', elinewidth=line_width, capsize=cap_size)
-                axs.scatter(xMean, yMean, s=marker_size, color='k', edgecolors='none')                
+            # Scale of distribution
+            kde = sm.nonparametric.KDEUnivariate(data)
+            kde.fit()
+            ydens = kde.density
+            if dist_type == 'Kernel':
+                scale = 0.20/np.max(ydens)
+            elif dist_type == 'Gaussian':
+                scale = 0.1/np.max(ydens)
             
-            # Format axis
-            axs.set(xticks=np.arange(start=0.1, stop=len(catnames), step=1), xticklabels=catnames)
-            axs.set_xlim([-0.5, len(catnames)+0.03])
-            axs.set(ylabel=y_label)
-            for item,value in kwargs.items():
-                if item=='YLim':
-                    axs[0].set_ylim(y_lim)
-    
+            xJitter, yJitter, xDistribution, yDistribution, xMean, yMean, xError, yError = Jitter_distribution(thisData, n, dist_type, scale)
+            
+            # Plot Jitter
+            axs.scatter(xJitter, yJitter, s=marker_size, color=cols[n], edgecolors='none', alpha=0.6)
+            
+            # Plot distribution
+            axs.plot(xDistribution, yDistribution, color=cols[n], linewidth=0.7*line_width)
+            axs.fill_between(x=xDistribution, y1=yDistribution, y2=0, color=cols[n], alpha=0.4, edgecolor='none')
+            
+            
+            axs.errorbar(xMean, yMean, yerr=yError, ecolor='k', elinewidth=line_width, capsize=cap_size)
+            axs.scatter(xMean, yMean, s=marker_size, color='k', edgecolors='none')                
+        
+        # Format axis
+        axs.set(xticks=np.arange(start=0.1, stop=len(catnames), step=1), xticklabels=catnames)
+        axs.set_xlim([-0.5, len(catnames)+0.03])
+        axs.set(ylabel=y_label)
+        for item,value in kwargs.items():
+            if item=='YLim':
+                axs[0].set_ylim(y_lim)
+
     plt.show(block=False)
     
     return
@@ -235,15 +231,14 @@ def Distribution(data, dist_type):
     from scipy import stats
     import statsmodels.api as sm
     
-    match dist_type:
-        case 'Gaussian':
+    if dist_type == 'Gaussian':
             mean_data = np.nanmean(data)
             std_data = np.nanstd(data)
             xnormdis = np.arange(start=-3*std_data+mean_data, stop=3*std_data+mean_data, step=0.001)
             y_norm = stats.norm.pdf(xnormdis, mean_data, std_data)
             xDistribution = y_norm
             yDistribution = xnormdis
-        case 'Kernel':
+    elif dist_type == 'Kernel':
             kde = sm.nonparametric.KDEUnivariate(data)
             kde.fit()
             density = kde.density
@@ -281,37 +276,36 @@ def Jitter_distribution(data, pos, dist_type, scale):
     xJitter = pos + jit*jitterstrength
     yJitter = data
     
-    match dist_type:
-        case 'Gaussian':
-            mean_data = np.nanmean(data)
-            std_data = np.nanstd(data)
-            xnormdis = np.arange(start=-3*std_data+mean_data, stop=3*std_data+mean_data, step=0.001)
-            y_norm = stats.norm.pdf(xnormdis, mean_data, std_data)
-            y_norm[0] = 0
-            y_norm[-1] = 0
-            y_norm = y_norm*scale
-            
-            xDistribution = y_norm+pos+0.20
-            yDistribution = xnormdis
-            xMean = pos+0.2
-            yMean = mean_data
-            xError = pos+0.2
-            yError = std_data
+    if dist_type == 'Gaussian':
+        mean_data = np.nanmean(data)
+        std_data = np.nanstd(data)
+        xnormdis = np.arange(start=-3*std_data+mean_data, stop=3*std_data+mean_data, step=0.001)
+        y_norm = stats.norm.pdf(xnormdis, mean_data, std_data)
+        y_norm[0] = 0
+        y_norm[-1] = 0
+        y_norm = y_norm*scale
         
-        case 'Kernel':
-            kde = sm.nonparametric.KDEUnivariate(data)
-            kde.fit()
-            value = kde.support
-            f = kde.density*scale
-            min_f = np.min(f)
-            offset = pos+0.2-min_f
-            
-            xDistribution = f+offset
-            yDistribution = value
-            xMean = pos+0.2
-            yMean = np.nanmean(data)
-            xError = pos+0.2
-            yError = np.nanstd(data)
+        xDistribution = y_norm+pos+0.20
+        yDistribution = xnormdis
+        xMean = pos+0.2
+        yMean = mean_data
+        xError = pos+0.2
+        yError = std_data
+        
+    elif dist_type == 'Kernel':
+        kde = sm.nonparametric.KDEUnivariate(data)
+        kde.fit()
+        value = kde.support
+        f = kde.density*scale
+        min_f = np.min(f)
+        offset = pos+0.2-min_f
+        
+        xDistribution = f+offset
+        yDistribution = value
+        xMean = pos+0.2
+        yMean = np.nanmean(data)
+        xError = pos+0.2
+        yError = np.nanstd(data)
             
     return xJitter, yJitter, xDistribution, yDistribution, xMean, yMean, xError, yError
     

@@ -10,24 +10,24 @@
            corresponding groups of the data points
 
  OPTIONAL INPUT
- scatter_plot(..., 'PARAM1', val1, 'PARAM2', val2, ...)
+ scatter_plot(..., KWARG1 = value1, KWARG2 = value2, ...)
  
-     'Colors'       Color of the jitter plots, num of cells should 
-                    correspond to categories{[r,g,b], [r,g,b], ...}. 
+     'Colors'       Color of the jitter plots, num of rows should 
+                    correspond to categories: np.array([[r,g,b], [r,g,b], ...]). 
                     Defaults to copper colormap 
      'Markersize'   Markersize of data points.
                     Defaults to 100. 
      'Trendline'    True or False. 
                     Defaults to False.  
-     'XLim'         Xlim [min max]
+     'XLim'         Xlim: np.array([min, max])
                     Defaults to standard lims. 
-     'YLim'         Ylim [min max]
+     'YLim'         Ylim: np.array([min, max])
                     Defaults to standard lims. 
-     'XLabel'       Xlabel {str}. 
+     'XLabel'       Xlabel: string. 
                     Defaults to empty string. 
-     'YLabel'       Ylabel {str}. 
+     'YLabel'       Ylabel: string. 
                     Defaults to empty string.
-     'DistType'     Kernel or Gaussian. 
+     'DistType'     'Kernel' or 'Gaussian'. 
                     Defaults to Kernel.
 
  Copyright (c) Matlab (original) version:
@@ -117,12 +117,10 @@ def scatter_distribution_figure(datax=False, datay=False, cats=False, **kwargs):
     for item,value in kwargs.items():
         if item=='YLim':
             axs[1,0].set_ylim(y_lim)
+    # axs[1,0].rcParams['axes.autolimit_mode'] = 'round_numbers'
     
-    match trendline:
-        case True:
-            axs[1,0].legend()
-        case False:
-            axs[1,0].legend()
+    if len(catnames)>1:
+        axs[1,0].legend()
     
     # Distribution plot y-axis
     for n in range(0,len(catnames)):
@@ -134,17 +132,13 @@ def scatter_distribution_figure(datax=False, datay=False, cats=False, **kwargs):
         axs[1,1].fill_between(x=xDistribution, y1=yDistribution, y2=0, color=cols[n], alpha=0.4, edgecolor='none')
     
     # Format axis of distribution plot y-axis
-    for item,value in kwargs.items():
-        if item=='XLim':
-            axs[1,1].set_ylim(y_lim)
-    for item,value in kwargs.items():
-        if item=='YLim':
-            axs[1,1].set_ylim(x_lim)
-    axs[1,1].set(xticks=[], yticks=[])  
+    axs[1,1].sharey(axs[1,0])
+    axs[1,1].tick_params(axis='both', colors='none')
     axs[1,1].spines['bottom'].set_color('none')
     axs[1,1].spines['left'].set_color('none')
     axs[1,1].spines['right'].set_color('none')
     axs[1,1].spines['top'].set_color('none')
+    
     
     # Distribution plot x-axis
     for n in range(0,len(catnames)):
@@ -155,20 +149,15 @@ def scatter_distribution_figure(datax=False, datay=False, cats=False, **kwargs):
         axs[0,0].plot(xDistribution, yDistribution, color=cols[n], linewidth=1.5)
         axs[0,0].fill_between(x=xDistribution, y1=yDistribution, y2=0, color=cols[n], alpha=0.4, edgecolor='none')
     
-    # Format axis of distribution plot y-axis
-    for item,value in kwargs.items():
-        if item=='XLim':
-            axs[0,0].set_ylim(y_lim)
-    for item,value in kwargs.items():
-        if item=='YLim':
-            axs[0,0].set_ylim(x_lim)
-    axs[0,0].set(xticks=[], yticks=[])  
+    # Format axis of distribution plot x-axis
+    axs[0,0].sharex(axs[1,0])
+    axs[0,0].tick_params(axis='both', colors='none')
     axs[0,0].spines['bottom'].set_color('none')
     axs[0,0].spines['left'].set_color('none')
     axs[0,0].spines['right'].set_color('none')
     axs[0,0].spines['top'].set_color('none')
     
-    axs[0,1].set(xticks=[], yticks=[])  
+    axs[0,1].tick_params(axis='both', colors='none')  
     axs[0,1].spines['bottom'].set_color('none')
     axs[0,1].spines['left'].set_color('none')
     axs[0,1].spines['right'].set_color('none')
@@ -210,40 +199,37 @@ def Distribution(data, direction, plot_type):
     xnormdis = np.arange(start=-3*std_data+mean_data, stop=3*std_data+mean_data, step=0.001)
     y_norm = stats.norm.pdf(xnormdis, mean_data, std_data)
     
-    match plot_type:
-        case 'Gaussian':
-            match direction:
-                case 'y':
-                    xDistribution = y_norm/10
-                    yDistribution = xnormdis
-                    y_norm[0] = 0
-                    y_norm[-1] = 0
-                    xPatch = y_norm/10
-                    yPatch = xnormdis
-                case 'x':
-                    xDistribution = xnormdis
-                    yDistribution = y_norm/10
-                    y_norm[0] = 0
-                    y_norm[-1] = 0
-                    xPatch = xnormdis
-                    yPatch = y_norm/10
-        case 'Kernel':
-            kde = sm.nonparametric.KDEUnivariate(data)
-            kde.fit()
-            density = kde.density
-            value = kde.support
+    if plot_type == 'Gaussian':
+        if direction == 'y':
+            xDistribution = y_norm/10
+            yDistribution = xnormdis
+            y_norm[0] = 0
+            y_norm[-1] = 0
+            xPatch = y_norm/10
+            yPatch = xnormdis
+        elif direction == 'x':
+            xDistribution = xnormdis
+            yDistribution = y_norm/10
+            y_norm[0] = 0
+            y_norm[-1] = 0
+            xPatch = xnormdis
+            yPatch = y_norm/10
+    elif plot_type == 'Kernel':
+        kde = sm.nonparametric.KDEUnivariate(data)
+        kde.fit()
+        density = kde.density
+        value = kde.support
             
-            match direction:
-                case 'y':
-                    xDistribution = density
-                    yDistribution = value
-                    xPatch = density
-                    yPatch = value
-                case 'x':
-                    xDistribution = value
-                    yDistribution = density
-                    xPatch = value
-                    yPatch = density
+        if direction == 'y':
+            xDistribution = density
+            yDistribution = value
+            xPatch = density
+            yPatch = value
+        elif direction == 'x':
+            xDistribution = value
+            yDistribution = density
+            xPatch = value
+            yPatch = density
                     
     return xDistribution, yDistribution, xPatch, yPatch
 
