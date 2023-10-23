@@ -16,7 +16,7 @@ Run the *example_figure_functions.py* script to run examples of:
  - statsmodels.api (0.13.2)
  - scikit-learn (1.3.0)
 
-If required, dependencies can be installed using the following command
+If required, dependencies can be installed using the following command:
 
 *pip install -r requirements.txt*
 
